@@ -22,11 +22,19 @@ const initialFriends = [
 ];
 
 function App() {
+  const [isNewFriendForm, setNewFriendForm] = useState(false);
+
+  function toggleForm() {
+    setNewFriendForm((status) => !status);
+  }
   return (
     <div className='app'>
       <div className='sidebar'>
         <FriendsList />
-        <AddFriendsForm />
+        {isNewFriendForm && <AddFriendsForm />}
+        <Button toggleForm={toggleForm}>
+          {isNewFriendForm ? 'Close' : 'Add friend'}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
@@ -68,43 +76,24 @@ function Friend({ friend }) {
   );
 }
 
-function Button({ children, changeBtnState }) {
+function Button({ children, toggleForm }) {
   return (
-    <button className='button' onClick={changeBtnState}>
+    <button className='button' onClick={toggleForm}>
       {children}
     </button>
   );
 }
 
 function AddFriendsForm() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  function handdleToggleBtn() {
-    setIsOpen(!isOpen);
-  }
-
   return (
-    <>
-      {!isOpen && <Button changeBtnState={handdleToggleBtn}>Add friend</Button>}
-      {isOpen && (
-        <>
-          <form className='form-add-friend'>
-            <label>🧑‍🤝‍🧑 Friend name</label>
-            <input type='text' />
-            <label>🖼️ Image URL</label>
-            <input type='text' />
-
-            <Button>Add</Button>
-          </form>
-          <Button changeBtnState={handdleToggleBtn}>close</Button>
-        </>
-      )}
-    </>
+    <form className='form-add-friend'>
+      <label>🧑‍🤝‍🧑 Friend name</label>
+      <input type='text' />
+      <label>🖼️ Image URL</label>
+      <input type='text' />
+      <Button>Add</Button>
+    </form>
   );
-}
-
-function InfoInput({ type, children, disabled }) {
-  return <></>;
 }
 
 function FormSplitBill() {
