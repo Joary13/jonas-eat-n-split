@@ -28,6 +28,7 @@ function App() {
         <FriendsList />
         <AddFriendsForm />
       </div>
+      <FormSplitBill />
     </div>
   );
 }
@@ -88,8 +89,11 @@ function AddFriendsForm() {
       {isOpen && (
         <>
           <form className='form-add-friend'>
-            <InfoInput type='text'>🧑‍🤝‍🧑 Friend name</InfoInput>
-            <InfoInput type='email'> 🖼️ Image URL</InfoInput>
+            <label>🧑‍🤝‍🧑 Friend name</label>
+            <input type='text' />
+            <label>🖼️ Image URL</label>
+            <input type='text' />
+
             <Button>Add</Button>
           </form>
           <Button changeBtnState={handdleToggleBtn}>close</Button>
@@ -99,12 +103,28 @@ function AddFriendsForm() {
   );
 }
 
-function InfoInput({ type, children }) {
+function InfoInput({ type, children, disabled }) {
+  return <></>;
+}
+
+function FormSplitBill() {
   return (
-    <>
-      <label>{children}</label>
-      <input type={type} />
-    </>
+    <form className='form-split-bill'>
+      <h2>SPLIT A BILL WITH X</h2>
+      <label>💰 Bill Value</label>
+      <input type='text' />
+      <label>🙎‍♂️ Your expense</label>
+      <input type='text' />
+      <label>🧑‍🤝‍🧑 Clark's expense</label>
+      <input type='text' disabled />
+      <label>💷 who's paying the bill</label>
+      <select>
+        <option value='user'>You</option>
+        <option value='friend'>Friend</option>
+      </select>
+
+      <Button>Split bill</Button>
+    </form>
   );
 }
 export default App;
