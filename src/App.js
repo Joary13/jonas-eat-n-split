@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const initialFriends = [
   {
     id: 118836,
@@ -24,6 +26,7 @@ function App() {
     <div className='app'>
       <div className='sidebar'>
         <FriendsList />
+        <AddFriendsForm />
       </div>
     </div>
   );
@@ -38,7 +41,6 @@ function FriendsList() {
           <Friend key={friend.id} friend={friend} />
         ))}
       </ul>
-      <Button>Add friend</Button>
     </>
   );
 }
@@ -65,8 +67,44 @@ function Friend({ friend }) {
   );
 }
 
-function Button({ children }) {
-  return <button className='button'>{children}</button>;
+function Button({ children, changeBtnState }) {
+  return (
+    <button className='button' onClick={changeBtnState}>
+      {children}
+    </button>
+  );
 }
 
+function AddFriendsForm() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handdleToggleBtn() {
+    setIsOpen(!isOpen);
+  }
+
+  return (
+    <>
+      {!isOpen && <Button changeBtnState={handdleToggleBtn}>Add friend</Button>}
+      {isOpen && (
+        <>
+          <form className='form-add-friend'>
+            <InfoInput type='text'>🧑‍🤝‍🧑 Friend name</InfoInput>
+            <InfoInput type='email'> 🖼️ Image URL</InfoInput>
+            <Button>Add</Button>
+          </form>
+          <Button changeBtnState={handdleToggleBtn}>close</Button>
+        </>
+      )}
+    </>
+  );
+}
+
+function InfoInput({ type, children }) {
+  return (
+    <>
+      <label>{children}</label>
+      <input type={type} />
+    </>
+  );
+}
 export default App;
