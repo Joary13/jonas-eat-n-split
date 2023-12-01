@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const initialFriends = [
+let initialFriends = [
   {
     id: 118836,
     name: 'Clark',
@@ -21,18 +21,29 @@ const initialFriends = [
   },
 ];
 
+//  randomImage = https://i.pravatar.cc/300
+
 function App() {
   const [isNewFriendForm, setNewFriendForm] = useState(false);
+  const [friendsList, setFriendsList] = useState(initialFriends);
 
-  function toggleForm() {
+  function onClick() {
     setNewFriendForm((status) => !status);
   }
+
+  function handdleAddFriend(obj) {
+    setFriendsList((friends) => [...friends, obj]);
+    setNewFriendForm(false);
+  }
+
   return (
     <div className='app'>
       <div className='sidebar'>
-        <FriendsList />
-        {isNewFriendForm && <AddFriendsForm />}
-        <Button toggleForm={toggleForm}>
+        <FriendsList friendsList={friendsList} />
+        {isNewFriendForm && (
+          <AddFriendsForm onClick={onClick} onAddFriend={handdleAddFriend} />
+        )}
+        <Button onClick={onClick}>
           {isNewFriendForm ? 'Close' : 'Add friend'}
         </Button>
       </div>
@@ -41,8 +52,9 @@ function App() {
   );
 }
 
-function FriendsList() {
-  const friends = initialFriends;
+function FriendsList({ friendsList }) {
+  const friends = [...friendsList];
+
   return (
     <>
       <ul>
@@ -55,7 +67,6 @@ function FriendsList() {
 }
 
 function Friend({ friend }) {
-  console.log(friend);
   return (
     <li>
       <img src={friend.image} alt={friend.name} />
@@ -76,21 +87,42 @@ function Friend({ friend }) {
   );
 }
 
-function Button({ children, toggleForm }) {
+function Button({ children, onClick }) {
   return (
-    <button className='button' onClick={toggleForm}>
+    <button className='button' onClick={onClick}>
       {children}
     </button>
   );
 }
 
-function AddFriendsForm() {
+function AddFriendsForm({ onClick, onAddFriend }) {
+  const [name, setName] = useState('');
+  const [url, setUrl] = useState('https://i.pravatar.cc/300');
+
+  function handdleData(e) {
+    e.preventDefault();
+    if (!name || !url) return;
+
+    onAddFriend({
+      id: crypto.randomUUID(),
+      name: name,
+      image: url,
+      balance: 0,
+    });
+    setName('');
+    setUrl('https://i.pravatar.cc/300');
+  }
+
   return (
-    <form className='form-add-friend'>
+    <form className='form-add-friend' onSubmit={handdleData}>
       <label>🧑‍🤝‍🧑 Friend name</label>
-      <input type='text' />
+      <input
+        type='text'
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <label>🖼️ Image URL</label>
-      <input type='text' />
+      <input type='text' value={url} onChange={(e) => setUrl(e.target.value)} />
       <Button>Add</Button>
     </form>
   );
