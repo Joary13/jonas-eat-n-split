@@ -74,6 +74,7 @@ function App() {
       </div>
       {selectFriend && (
         <FormSplitBill
+          key={selectFriend.id}
           selectFriend={selectFriend}
           onCalculBalance={handdleModifyBalance}
         />
